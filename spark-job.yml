@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spark-master
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      job: spark-job
+  template:
+    metadata:
+      labels:
+        job: spark-job
+    spec:
+      containers:
+      - args:
+        - '/opt/spark/bin/spark-submit ../examples/src/main/python/pi.py 2500; tail -f /dev/null;'
+        command:
+        - /bin/sh
+        - -c
+        image: cnvrg/custom:spark-2.4.4
+        imagePullPolicy: IfNotPresent
+        name: main
+        resources:
+          requests:
+            cpu: 0.1
+            memory: 100m
+        volumeMounts:
+        - mountPath: /opt/spark/conf
+          name: spark-config
+      imagePullSecrets:
+      - name: regcred
+      serviceAccount: spark
+      serviceAccountName: spark
+      volumes:
+      - configMap:
+          name: spark-config
+        name: spark-config
+  
