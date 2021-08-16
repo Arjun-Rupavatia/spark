@@ -1,0 +1,1 @@
+After Installing Spark-Operator on kebernetes on "Spark-Operator" namespace use this YAML to trigger spark application via Spark-Operator
