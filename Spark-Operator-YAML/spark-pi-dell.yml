@@ -1,0 +1,40 @@
+apiVersion: "sparkoperator.k8s.io/v1beta2"
+kind: SparkApplication
+metadata:
+  name: spark-pi-dell-1
+  namespace: default
+spec:
+  type: Python
+  mode: cluster
+  image: "arjun1346/spark-py:v3.0.3-j8"
+  mainApplicationFile: "/opt/spark/examples/src/main/python/pi.py"
+  arguments:
+  - '1000'
+  sparkVersion: "3.0.3"
+  # volumes:
+  #   - name: "pvc-559dade0-e0df-4f21-b32c-49b8a86fc597"
+  #     hostPath:
+  #       path: "/var/lib/k8s-pvs/data-pubsubplus-dev-1628238519-pubsubplus-dev-0/pvc-559dade0-e0df-4f21-b32c-49b8a86fc597"
+  executor:
+    cores: 1
+    instances: 4
+    memory: "512m"
+    #serviceAccount: spark
+    # volumeMounts:
+    # - mountPath: /opt/spark/conf
+    #   name: spark-config
+    # volumeMounts:
+    #   - name: "pvc-559dade0-e0df-4f21-b32c-49b8a86fc597"
+    #     mountPath: "/var/lib/k8s-pvs/data-pubsubplus-dev-1628238519-pubsubplus-dev-0/pvc-559dade0-e0df-4f21-b32c-49b8a86fc597"
+  driver:
+    cores: 1
+    coreLimit: "1200m"
+    memory: "512m"
+    #serviceAccount: spark
+    # volumeMounts:
+    # - mountPath: /opt/spark/conf
+    #   name: spark-config
+  
+  
+  restartPolicy:
+    type: OnFailure
